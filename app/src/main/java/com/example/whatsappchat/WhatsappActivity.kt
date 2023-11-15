@@ -2,6 +2,8 @@ package com.example.whatsappchat
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.whatsappchat.databinding.ActivityWhatsappBinding
 
@@ -35,18 +37,36 @@ class WhatsappActivity : AppCompatActivity() {
 
         )
 
-
         binding.btnSend.setOnClickListener {
-            val messageText = binding.edtSend.text.toString().trim()
-            if (messageText.isNotEmpty()) {
-                val newMessage = WhatsappMessage(messageText, true)
-                messages.add(newMessage)
-                binding.whatsappRecyclerView.scrollToPosition(messages.size - 1)
-                binding.edtSend.text.clear()
-            }
+            sendMessage()
         }
         binding.whatsappRecyclerView.layoutManager = LinearLayoutManager(this)
         val adapter = WhatsappAdapter(messages)
+
+        binding.edtSend.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEND ||
+                (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER &&
+                        event.action == KeyEvent.ACTION_DOWN)
+            ) {
+                sendMessage()
+                return@setOnEditorActionListener true
+            }
+            false
+        }
         binding.whatsappRecyclerView.adapter = adapter
+
     }
+
+    private fun sendMessage() {
+        val messageText = binding.edtSend.text.toString().trim()
+        if (messageText.isNotEmpty()) {
+            val newMessage = WhatsappMessage(messageText, true)
+            messages.add(newMessage)
+            binding.whatsappRecyclerView.scrollToPosition(messages.size - 1)
+            binding.edtSend.text.clear()
+        }
+    }
+
+
+
 }
