@@ -12,7 +12,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:maxWidth="300dp"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="5dp"
             android:background="@drawable/message_receive_border"
             android:padding="10dp"
             android:text="TextView"
